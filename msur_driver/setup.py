@@ -13,7 +13,7 @@ setup(
     ],
     install_requires=[
         'setuptools',
-        'msur_stm_driver'
+        'msur-packages'
         ],
     zip_safe=True,
     maintainer='Photon94',

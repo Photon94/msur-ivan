@@ -19,7 +19,7 @@ class Driver(Node):
         self.subscription = self.create_subscription(Twist, 'cmd_vel', self.driver_callback, 10)
         self.client = Client()
         self.get_logger().info('Узел драйвера запущен!')
-    
+
     def driver_callback(self, msg: Twist):
         self.get_logger().info(f"{msg}")
         self.client.send([XThrust(value=msg.linear.x), YThrust(value=msg.linear.y), ZThrust(value=msg.linear.z)])

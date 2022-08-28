@@ -1,13 +1,10 @@
 from rclpy.node import Node
-import sys
-print(sys.executable)
 import rclpy
-import time
-from std_msgs.msg import Header, Bool
+from std_msgs.msg import Header
 from sensor_msgs.msg import BatteryState, Imu
 from msur_msgs.msg import PayloadConfig, ModulesError, PidStatus, Leaks
 from geometry_msgs.msg import PoseStamped, Vector3, Twist
-from msur_stm_driver import service
+from msur_packages.driver import service
 
 
 class Telemetry(Node):
@@ -19,19 +16,17 @@ class Telemetry(Node):
 
     def __init__(self) -> None:
         super().__init__(self.header.frame_id)
-
         self.payload_publisher = self.create_publisher(PayloadConfig, 'telemetry/payload', 10)
         self.leaks_publisher = self.create_publisher(Leaks, 'telemetry/leaks', 10)
         self.pid_publisher = self.create_publisher(PidStatus, 'telemetry/pid', 10)
         self.errors_publisher = self.create_publisher(ModulesError, 'telemetry/errors', 10)
         self.battery_publisher = self.create_publisher(BatteryState, 'telemetry/battery', 10)
         self.imu_publisher = self.create_publisher(Imu, 'telemetry/orientation', 10)
-        self. i = 0
         self.client = service.Client()
-        self.timer = self.create_timer(0.5, self.calback)
+        self.timer = self.create_timer(0.1, self.callback)
         self.get_logger().info('Узел публикации телеметрии запущен!')
 
-    def calback(self):
+    def callback(self):
         # Устанавливаем тайм-штамп
         self.header.stamp = self.get_clock().now().to_msg()
 
@@ -50,6 +45,7 @@ class Telemetry(Node):
         self.imu_publisher.publish(Imu(header=self.header, angular_velocity=telemetry.get_vector(Vector3)))
         # Публикуем состояние батареи
         self.battery_publisher.publish(BatteryState(voltage=telemetry.voltage, current=telemetry.current, present=True))
+
 
 def main(args=None):
     rclpy.init(args=args)
