@@ -3,7 +3,7 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Header
 from msur_stm_driver.service import Client
-from msur_stm_driver.protocol import XThrust, YThrust, ZThrust
+from msur_stm_driver.protocol import XThrust, YThrust, ZThrust, Yaw
 
 
 class Driver(Node):
@@ -22,7 +22,7 @@ class Driver(Node):
 
     def driver_callback(self, msg: Twist):
         self.get_logger().info(f"{msg}")
-        self.client.send([XThrust(value=msg.linear.x), YThrust(value=msg.linear.y), ZThrust(value=msg.linear.z)])
+        self.client.send([XThrust(value=msg.linear.x), YThrust(value=msg.linear.y), ZThrust(value=msg.linear.z), Yaw(value=msg.angular.z)])
 
 
 def main(args=None):
