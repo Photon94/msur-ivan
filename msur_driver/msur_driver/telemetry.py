@@ -25,12 +25,23 @@ class Telemetry(Node):
         self.client = service.Client()
         self.timer = self.create_timer(0.1, self.callback)
         self.get_logger().info('Узел публикации телеметрии запущен!')
+        self.connected = None
 
     def callback(self):
         # Устанавливаем тайм-штамп
         self.header.stamp = self.get_clock().now().to_msg()
 
-        telemetry = self.client.telemetry()
+        try:
+            telemetry = self.client.telemetry()
+            if self.connected in [None, False]:
+                self.get_logger().info('Установленно подключение к аппарату')
+                self.connected = True
+        except ConnectionError as e:
+            if self.connected in [None, True]:
+                self.connected = False
+                self.get_logger().warning('Нет подключения к аппарату')
+            return
+
         if telemetry is None:
             self.get_logger().warning('Телеметрия не доступна, проверьте промежуточный сервис')
         # Публикуем статус протечек
