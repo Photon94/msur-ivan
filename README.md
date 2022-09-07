@@ -2,11 +2,9 @@
 # MSUR-Ivan
 
 ## Build
-### MSUR msgs
-colcon build --packages-select msur_msgs
 
-### MSUR driver
-colcon build --allow-overriding msur_driver --packages-select msur_driver
+colcon build --allow-overriding msur_msgs msur_driver --packages-select msur_msgs msur_driver
+
 
 
 ## Run

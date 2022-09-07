@@ -22,7 +22,7 @@ class Driver(Node):
 
     def driver_callback(self, msg: Twist):
         self.get_logger().info(f"{msg}")
-        self.client.send([XThrust(value=msg.linear.x), YThrust(value=msg.linear.y), ZThrust(value=msg.linear.z)])
+        self.client.send([XThrust(value=msg.linear.x), YThrust(value=msg.linear.y), ZThrust(value=msg.linear.z), Yaw(value=msg.angular.z)])
 
 
 def main(args=None):
