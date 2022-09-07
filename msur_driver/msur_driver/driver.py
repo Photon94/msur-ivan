@@ -2,8 +2,8 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Header
-from msur_stm_driver.service import Client
-from msur_stm_driver.protocol import XThrust, YThrust, ZThrust
+from msur_packages.driver.service import Client
+from msur_packages.driver.protocol import XThrust, YThrust, ZThrust, Yaw
 
 
 class Driver(Node):
